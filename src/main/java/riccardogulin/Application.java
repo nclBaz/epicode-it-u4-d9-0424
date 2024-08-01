@@ -94,5 +94,32 @@ public class Application {
 		System.out.println("-------------------- 1. Ottengo i 5 user più vecchi --------------------------");
 		List<User> fiveUsersSortedByAgeDesc = usersList.stream().sorted(Comparator.comparingInt(User::getAge).reversed()).skip(5).limit(5).toList();
 		fiveUsersSortedByAgeDesc.forEach(System.out::println);
+
+		// ******************************************************* MAP TO ***********************************************
+		// 1. Calcolo della somma delle età tramite reduce
+		System.out.println("-------------------- 1. Calcolo della somma delle età tramite reduce --------------------------");
+		int totalAge = usersList.stream().map(User::getAge).reduce(0, (acc, age) -> acc + age);
+		// int totalAge = usersList.stream().map(User::getAge).reduce(0, Integer::sum);
+		System.out.println("La somma delle età: " + totalAge);
+
+		// 2. Calcolo della somma delle età tramite mapToInt
+		System.out.println("-------------------- 2. Calcolo della somma delle età tramite mapToInt --------------------------");
+		int totalAge2 = usersList.stream().mapToInt(User::getAge).sum();
+		System.out.println("La somma delle età: " + totalAge2);
+
+		// 3. Calcolo della media delle età tramite mapToInt
+		System.out.println("-------------------- 3. Calcolo della media delle età tramite mapToInt --------------------------");
+		OptionalDouble average = usersList.stream().mapToInt(User::getAge).average();
+		if (average.isPresent()) System.out.println("La media delle età: " + average.getAsDouble());
+		else System.out.println("Non è stato possibile calcolare una media perché la lista è vuota");
+
+		// 4. Calcolo dell'età maggiore tramite mapToInt
+		System.out.println("-------------------- 4. Calcolo dell'età maggiore tramite mapToInt --------------------------");
+		OptionalInt maxAge = usersList.stream().mapToInt(User::getAge).max();
+		if (maxAge.isPresent()) System.out.println("L'età massima è: " + maxAge.getAsInt());
+		else System.out.println("Non è stato possibile trovare il più vecchio");
+
+		IntSummaryStatistics stats = usersList.stream().mapToInt(User::getAge).summaryStatistics();
+		System.out.println(stats);
 	}
 }
